@@ -1,0 +1,386 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - PocketWise</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #00c853 0%, #00b14f 50%, #009940 100%);
+        color: #fff;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* Animated finance-themed background */
+      body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: 
+          radial-gradient(circle at 15% 20%, rgba(255, 255, 255, 0.15) 0%, transparent 40%),
+          radial-gradient(circle at 85% 80%, rgba(255, 255, 255, 0.12) 0%, transparent 40%),
+          radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
+        z-index: 0;
+      }
+
+      /* Floating finance icons */
+      body::after {
+        content: '💰 📊 💳 📈 💵 🏦 💹 📉 💸 🪙 📊 👨‍🎓 👨‍🏫 🤵 🤝 🛒 🏧 📋 🚗 🛫 🏡 🆙';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        font-size: 3rem;
+        opacity: 0.08;
+        letter-spacing: 100px;
+        line-height: 150px;
+        animation: floatIcons 30s linear infinite;
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      @keyframes floatIcons {
+        0% { transform: translateY(0) rotate(0deg); }
+        100% { transform: translateY(-100vh) rotate(360deg); }
+      }
+
+      /* Money pattern background */
+      .money-pattern {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.05;
+        z-index: 0;
+        pointer-events: none;
+        background: 
+          repeating-linear-gradient(45deg, transparent, transparent 50px, rgba(255,255,255,0.1) 50px, rgba(255,255,255,0.1) 51px),
+          repeating-linear-gradient(-45deg, transparent, transparent 50px, rgba(255,255,255,0.1) 50px, rgba(255,255,255,0.1) 51px);
+        animation: slidePattern 20s linear infinite;
+      }
+
+      @keyframes slidePattern {
+        0% { background-position: 0 0, 0 0; }
+        100% { background-position: 100px 100px, -100px 100px; }
+      }
+
+      .login-container {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        padding: 50px 40px;
+        border-radius: 20px;
+        width: 100%;
+        max-width: 420px;
+        text-align: center;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        position: relative;
+        z-index: 10;
+        animation: fadeInUp 0.8s ease-out;
+        border: 3px solid rgba(255, 215, 0, 0.3);
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .login-container::before {
+        content: '🔐';
+        font-size: 4rem;
+        display: block;
+        margin-bottom: 10px;
+        animation: pulse 2s ease-in-out infinite;
+      }
+
+      @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+      }
+
+      .login-container h2 {
+        margin-bottom: 35px;
+        font-size: 2rem;
+        color: #1a1a1a;
+        animation: slideDown 0.6s ease-out;
+      }
+
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .login-container label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #333;
+        text-align: left;
+        font-size: 0.95rem;
+      }
+
+      .input-group {
+        position: relative;
+        margin-bottom: 25px;
+      }
+
+      .login-container input {
+        width: 100%;
+        padding: 14px 16px;
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: white;
+        color: #333;
+      }
+
+      .login-container input:focus {
+        border-color: #00c853;
+        outline: none;
+        box-shadow: 0 0 15px rgba(0, 200, 83, 0.2);
+        transform: translateY(-2px);
+      }
+
+      .login-container button {
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, #00c853, #00b14f);
+        border: none;
+        border-radius: 12px;
+        color: #fff;
+        font-size: 1.1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 200, 83, 0.3);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .login-container button::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transition: width 0.6s, height 0.6s, top 0.6s, left 0.6s;
+        transform: translate(-50%, -50%);
+      }
+
+      .login-container button:hover::before {
+        width: 400px;
+        height: 400px;
+      }
+
+      .login-container button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 25px rgba(0, 200, 83, 0.5);
+      }
+
+      .login-container button:active {
+        transform: translateY(-1px);
+      }
+
+      .login-container p {
+        margin-top: 25px;
+        font-size: 0.95rem;
+        color: #555;
+      }
+
+      .login-container a {
+        color: #00c853;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .login-container a:hover {
+        color: #00b14f;
+        text-decoration: underline;
+      }
+
+      .divider {
+        margin: 25px 0;
+        display: flex;
+        align-items: center;
+        color: #999;
+        font-size: 0.9rem;
+      }
+
+      .divider::before,
+      .divider::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: #e0e0e0;
+      }
+
+      .divider::before {
+        margin-right: 10px;
+      }
+
+      .divider::after {
+        margin-left: 10px;
+      }
+
+      /* Error message styling */
+      .error-message {
+        background: #f8d7da;
+        color: #721c24;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        border: 1px solid #f5c6cb;
+        font-size: 0.9rem;
+        animation: shake 0.5s ease;
+        display: none;
+      }
+
+      .error-message.show {
+        display: block;
+      }
+
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-10px); }
+        75% { transform: translateX(10px); }
+      }
+
+      /* Success message styling */
+      .success-message {
+        background: #d4edda;
+        color: #155724;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        border: 1px solid #c3e6cb;
+        font-size: 0.9rem;
+        animation: fadeIn 0.5s ease;
+        display: none;
+      }
+
+      .success-message.show {
+        display: block;
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+
+      @media (max-width: 480px) {
+        .login-container {
+          padding: 40px 30px;
+          max-width: 90%;
+        }
+
+        .login-container h2 {
+          font-size: 1.6rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="money-pattern"></div>
+    
+    <div class="login-container">
+      <h2>Login to Your Account</h2>
+      
+      <div id="errorMessage" class="error-message"></div>
+      <div id="successMessage" class="success-message"></div>
+
+      <form onsubmit="return validateform()" action="index.html">
+        <div class="input-group">
+          <label for="username">Username:</label>
+          <input type="text" id="username" name="username" required placeholder="Enter your username">
+        </div>
+
+        <div class="input-group">
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required placeholder="Enter your password">
+        </div>
+
+        <button type="submit">Login</button>
+      </form>
+
+      <div class="divider">OR</div>
+
+      <p>
+        Don't have an account? 
+        <a href="register.html">Register here</a>
+      </p>
+      <p>
+        <a href="#">Forgot Password?</a>
+      </p>
+    </div>
+
+    <script>
+      function showError(message) {
+        const errorDiv = document.getElementById("errorMessage");
+        errorDiv.textContent = message;
+        errorDiv.classList.add("show");
+        
+        setTimeout(() => {
+          errorDiv.classList.remove("show");
+        }, 3000);
+      }
+
+      function showSuccess(message) {
+        const successDiv = document.getElementById("successMessage");
+        successDiv.textContent = message;
+        successDiv.classList.add("show");
+      }
+
+      function validateform() {
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+        var usernamePattern = /^[A-Za-z]{3,10}$/;
+        var passwordPattern = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+        
+        if (!usernamePattern.test(username)) {
+          showError("Username must contain only letters (3-10 characters).");
+          return false;
+        }
+        
+        if (!passwordPattern.test(password)) {
+          showError("Password must contain at least 8 characters, one uppercase letter, one lowercase letter, and one number.");
+          return false;
+        }
+        
+        showSuccess("✅ Login Successful! Redirecting...");
+        return true;
+      }
+    </script>
+  </body>
+</html>
